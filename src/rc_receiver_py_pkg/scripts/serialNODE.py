@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
 import serial
-from filehandler      import FileHandler
-from messageconverter import MessageConverter
+from rc_receiver_py_pkg.filehandler      import FileHandler
+from rc_receiver_py_pkg.messageconverter import MessageConverter
 import json
 
 import rospy

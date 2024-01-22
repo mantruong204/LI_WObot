@@ -3,7 +3,7 @@
 import json
 from pynput import keyboard
 
-from RcBrainThread import RcBrainThread
+from remote_control_pkg.RcBrainThread import RcBrainThread
 from std_msgs.msg import String
 
 import rospy

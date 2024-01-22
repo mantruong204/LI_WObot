@@ -1,0 +1,3 @@
+<launch>
+    <node pkg="rc_receiver_py_pkg" type="serialNODE.py" 				name="serialNODE"  			output="screen"/>
+</launch>
