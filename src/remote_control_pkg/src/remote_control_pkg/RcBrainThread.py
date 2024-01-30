@@ -42,14 +42,14 @@ class RcBrainThread:
         #----------------- CONSTANT VALUES --------------------
         #this values do not change
         self.parameterIncrement =   0.1
-        self.limit_configParam = RcBrainConfigParams(21.0, 90.0, 3.0, 4.0, 0.001, 0.001, 0.000001)
+        self.limit_configParam = RcBrainConfigParams(24.0, 45.0, 3.0, 4.0, 0.001, 0.001, 0.000001)
 
         self.startSpeed         =   9.0
         self.startSteerAngle    =   1.0
 
         #----------------- DEFAULT VALUES ----------------------
         #when the RC is reset, this are the default values
-        self.default_configParam = RcBrainConfigParams(20.5,90.0,1.5,2.0, 0.001, 0.001, 0.000001)
+        self.default_configParam = RcBrainConfigParams(24.0,45.0,1.5,2.0, 0.001, 0.001, 0.000001)
         
         #----------------- PARAMETERS -------------------------
         #this parameter can be modified via key events. 
@@ -97,7 +97,7 @@ class RcBrainThread:
         # SPEED command
         elif self.currentState[0] or self.currentState[1]:
             data['action']        =  '1'
-            data['speed']         =  float(self.speed/100.0)
+            data['speed']         =  float(self.speed)
         # STEERING command
         elif self.currentState[2] or self.currentState[3]:
             data['action']        =  '2'
@@ -217,7 +217,7 @@ class RcBrainThread:
 
 
     # ===================================== UPDATE STEER ANGLE ===========================
-    def _updateSteerAngle(self):
+    def _updateSteerAngle_old(self):
         """Update the steering angle based on the current state and the keyboard event.
         """
         #left steer
@@ -240,6 +240,32 @@ class RcBrainThread:
                     self.steerAngle += self.configParam.steerAngleStep
         elif not self.currentState[2] and not self.currentState[3]:
                 self.steerAngle = 0
+
+    def _updateSteerAngle(self):
+        """Update the steerAngle based on the current state and the keyboard event.
+        """
+        #left steer
+        if self.currentState[3]:
+            if self.steerAngle == 0:
+                self.steerAngle = self.startSteerAngle
+            elif self.steerAngle == -self.startSteerAngle:
+                self.steerAngle = 0
+            elif self.steerAngle < self.configParam.maxSteerAngle:
+                if  self.configParam.maxSteerAngle - self.steerAngle < self.configParam.steerAngleStep:
+                    self.steerAngle = self.configParam.maxSteerAngle
+                else:
+                    self.steerAngle += self.configParam.steerAngleStep
+        #right steer
+        elif self.currentState[2]:
+            if self.steerAngle == 0:
+                self.steerAngle = - self.startSteerAngle
+            elif self.steerAngle == self.startSteerAngle:
+                self.steerAngle = 0
+            elif self.steerAngle >  -self.configParam.maxSteerAngle:
+                if  abs(self.configParam.maxSteerAngle + self.steerAngle) < self.configParam.steerAngleStep:
+                    self.steerAngle = - self.configParam.maxSteerAngle
+                else:
+                    self.steerAngle -= self.configParam.steerAngleStep
 
     # ===================================== UPDATE PARAMS ================================
     def _updateParameters(self, currentKey):
@@ -343,12 +369,12 @@ class RcBrainThread:
             self.currentState[2] = True
         elif currentKey == 'r.a':
             self.currentState[2] = False
-            self.currentState[7] = True
+            # self.currentState[7] = True
         elif currentKey == 'p.d':
             self.currentState[3] = True
         elif currentKey == 'r.d':
             self.currentState[3] = False
-            self.currentState[7] = True
+            # self.currentState[7] = True
         elif currentKey == 'p.space':
             self.currentState[4] = True
         elif currentKey == 'r.space':
