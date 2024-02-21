@@ -1,3 +1,0 @@
-<launch>
-    <node pkg="remote_control_pkg" type="remote_control.py" 				name="CONTROLLERnode"  			output="screen"/>
-</launch>
