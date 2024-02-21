@@ -42,14 +42,14 @@ class RcBrainThread:
         #----------------- CONSTANT VALUES --------------------
         #this values do not change
         self.parameterIncrement =   0.1
-        self.limit_configParam = RcBrainConfigParams(24.0, 45.0, 3.0, 4.0, 0.001, 0.001, 0.000001)
+        self.limit_configParam = RcBrainConfigParams(24.0, 99.0, 3.0, 4.0, 0.001, 0.001, 0.000001)
 
-        self.startSpeed         =   9.0
+        self.startSpeed         =   10.0
         self.startSteerAngle    =   1.0
 
         #----------------- DEFAULT VALUES ----------------------
         #when the RC is reset, this are the default values
-        self.default_configParam = RcBrainConfigParams(24.0,45.0,1.5,2.0, 0.001, 0.001, 0.000001)
+        self.default_configParam = RcBrainConfigParams(24.0,99.0,1.5,2.0, 0.001, 0.001, 0.000001)
         
         #----------------- PARAMETERS -------------------------
         #this parameter can be modified via key events. 
@@ -90,6 +90,8 @@ class RcBrainThread:
             It contains the robot current control state, speed and angle. 
         """
         data = {}
+        if self.steerAngle < -10.0:
+            self.steerAngle = -10.0
         # BRAKE command
         if self.currentState[4]:
             data['action']        =  '3'
@@ -97,7 +99,7 @@ class RcBrainThread:
         # SPEED command
         elif self.currentState[0] or self.currentState[1]:
             data['action']        =  '1'
-            data['speed']         =  float(self.speed)
+            data['speed']         =  float(self.speed/100.0)
         # STEERING command
         elif self.currentState[2] or self.currentState[3]:
             data['action']        =  '2'
