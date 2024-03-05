@@ -30,7 +30,7 @@ class RemoteControlTransmitterProcess():
     def run(self):
         """Apply initializing methods and start the threads. 
         """
-        with keyboard.Listener(on_press = self.keyPress, on_release = self.keyRelease) as listener: 
+        with keyboard.Listener(on_press = self.keyPress, on_release = self.keyRelease, suppress=True) as listener: 
             listener.join()
 	
     # ===================================== KEY PRESS ====================================
