@@ -1,5 +1,4 @@
-# SAMMOT_LIO
-ROS packages for Remote Control Car model Utilities
+# ROS packages for Remote Control Car model Utilities
 # Packages
 ## 1. Remote controller node:
    - Parsing keyboard input:
